@@ -5,7 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.calculator.data.buttons
 import com.example.calculator.ui.screens.CalculatorScreen
+import com.example.calculator.ui.screens.UiViewModel
 
 import com.example.calculator.ui.theme.CalculatorTheme
 
@@ -15,8 +18,11 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CalculatorTheme {
+                val uiViewModel: UiViewModel = viewModel()
                 CalculatorScreen(
-                    modifier = Modifier
+                    uiViewModel = uiViewModel,
+                    modifier = Modifier,
+                    buttons = buttons
                 )
             }
         }

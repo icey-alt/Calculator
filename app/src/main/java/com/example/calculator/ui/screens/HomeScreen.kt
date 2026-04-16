@@ -1,5 +1,6 @@
 package com.example.calculator.ui.screens
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,20 +16,23 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.calculator.data.buttons
 import com.example.calculator.model.ButtonType
 import com.example.calculator.model.CalcButton
-import com.example.calculator.ui.theme.CalculatorTheme
 
 @Composable
 fun DisplayScreen(
+    uiViewModel: UiViewModel,
     modifier: Modifier = Modifier
 ) {
+    val expression by uiViewModel.expression.collectAsState()
+    val result by uiViewModel.result.collectAsState()
+    
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -37,12 +41,12 @@ fun DisplayScreen(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "7+5",
+            text = expression,
             style = MaterialTheme.typography.displayLarge,
             modifier = Modifier.padding(bottom = 8.dp)
         )
         Text(
-            text = "12",
+            text = result,
             style = MaterialTheme.typography.titleLarge,
             color = Color.Gray
         )
@@ -51,6 +55,7 @@ fun DisplayScreen(
 
 @Composable
 fun KeypadScreen(
+    uiViewModel: UiViewModel,
     modifier: Modifier = Modifier,
     buttons: List<CalcButton>
 ) {
@@ -67,7 +72,9 @@ fun KeypadScreen(
             ) {
                 rowButtons.forEach { button ->
                     Button(
-                        onClick = {},
+                        onClick = {
+                            uiViewModel.onButtonClick(button.text)
+                        },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = button.type.color
                         ),
@@ -90,7 +97,9 @@ fun KeypadScreen(
 
 @Composable
 fun CalculatorScreen(
-    modifier: Modifier
+    uiViewModel: UiViewModel,
+    modifier: Modifier,
+    buttons: List<CalcButton>
 ) {
     Column(
         modifier = modifier
@@ -99,41 +108,12 @@ fun CalculatorScreen(
             .navigationBarsPadding()
     ) {
         DisplayScreen(
+            uiViewModel = uiViewModel,
             modifier = Modifier.weight(1f)
         )
         KeypadScreen(
+            uiViewModel = uiViewModel,
             buttons = buttons
-        )
-    }
-}
-
-@Preview
-@Composable
-fun CalculatorPreview() {
-    CalculatorTheme {
-        CalculatorScreen(
-            modifier = Modifier.fillMaxWidth()
-        )
-    }
-}
-
-@Preview
-@Composable
-fun DisplayPreview() {
-    CalculatorTheme {
-        DisplayScreen(
-            modifier = Modifier.fillMaxWidth()
-        )
-    }
-}
-
-@Preview
-@Composable
-fun KeypadScreenPreview() {
-    CalculatorTheme {
-        KeypadScreen(
-            buttons = buttons,
-            modifier = Modifier.fillMaxWidth()
         )
     }
 }
