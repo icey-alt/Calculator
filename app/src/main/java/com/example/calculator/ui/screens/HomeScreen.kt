@@ -32,7 +32,8 @@ fun DisplayScreen(
 ) {
     val expression by uiViewModel.expression.collectAsState()
     val result by uiViewModel.result.collectAsState()
-    
+    val showResult by uiViewModel.showResult.collectAsState()
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -40,16 +41,29 @@ fun DisplayScreen(
         horizontalAlignment = Alignment.End,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(
-            text = expression,
-            style = MaterialTheme.typography.displayLarge,
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
-        Text(
-            text = result,
-            style = MaterialTheme.typography.titleLarge,
-            color = Color.Gray
-        )
+        if (showResult) {
+            Text(
+                text = result,
+                style = MaterialTheme.typography.displayLarge,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+            Text(
+                text = expression,
+                style = MaterialTheme.typography.titleLarge,
+                color = Color.Gray
+            )
+        } else {
+            Text(
+                text = expression,
+                style = MaterialTheme.typography.displayLarge,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+            Text(
+                text = result,
+                style = MaterialTheme.typography.titleLarge,
+                color = Color.Gray
+            )
+        }
     }
 }
 
